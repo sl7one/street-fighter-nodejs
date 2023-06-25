@@ -5,9 +5,7 @@ import { userService } from '../services/userService.js';
 import { validateUser, validateUserToUpdate } from '../validation/validateUsers.js';
 
 const searcher = field => {
-  const res = userService.search(field);
-  if (!res) return false;
-  return res.id ? true : false;
+  return userService.search(field) === null ? true : false;
 };
 
 const getAllUsers = (req, res, next) => {
@@ -38,6 +36,12 @@ const deleteUser = (req, res, next) => {
 
 const createUserValid = (req, res, next) => {
   // TODO: Implement validatior for USER entity during creation
+
+  const { isValid } = validateUser(req.body);
+  if (!isValid) {
+    return next(error(400, 'User entity to create isn’t valid'));
+  }
+
   req.body = {
     ...req.body,
     firstName: normalizeName(req.body.firstName),
@@ -49,16 +53,11 @@ const createUserValid = (req, res, next) => {
   const isExistEmail = searcher({ email: req.body.email });
   const isExistPhoneNumber = searcher({ phoneNumber: req.body.phoneNumber });
 
-  if (isExistEmail) {
+  if (!isExistEmail) {
     return next(error(400, 'Email exist in database'));
   }
-  if (isExistPhoneNumber) {
+  if (!isExistPhoneNumber) {
     return next(error(400, 'Phone number exist in database'));
-  }
-
-  const { isValid } = validateUser(req.body);
-  if (!isValid) {
-    return next(error(400, 'User entity to create isn’t valid'));
   }
 
   const newUser = userService.create(req.body);
@@ -68,19 +67,20 @@ const createUserValid = (req, res, next) => {
 
 const updateUserValid = (req, res, next) => {
   // TODO: Implement validatior for user entity during update
-  const isExistEmail = searcher({ email: req.body.email });
-  const isExistPhoneNumber = searcher({ phoneNumber: req.body.phoneNumber });
-
-  if (isExistEmail) {
-    return next(error(400, 'Email exist in database'));
-  }
-  if (isExistPhoneNumber) {
-    return next(error(400, 'Phone number exist in database'));
-  }
 
   const { isValid, message } = validateUserToUpdate(req.body);
   if (!isValid) {
     return next(error(400, 'User entity to create isn’t valid'));
+  }
+
+  const isExistEmail = searcher({ email: req.body.email });
+  const isExistPhoneNumber = searcher({ phoneNumber: req.body.phoneNumber });
+
+  if (!isExistEmail) {
+    return next(error(400, 'Email exist in database'));
+  }
+  if (!isExistPhoneNumber) {
+    return next(error(400, 'Phone number exist in database'));
   }
 
   const { id } = req.body;

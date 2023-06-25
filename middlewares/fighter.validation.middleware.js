@@ -2,15 +2,15 @@ import { normalizeName } from '../helpers/normalizeName.js';
 import { error } from '../helpers/error.js';
 import { FIGHTER } from '../models/fighter.js';
 import { fighterService } from '../services/fighterService.js';
-import { validateFighter, validateFighterToUpdate } from '../validation/validateFighters.js';
+import { validateFighter } from '../validation/validateFighters.js';
 
 const searcher = field => {
-  return userService.search(field) === null ? true : false;
+  return fighterService.search(field) === null ? true : false;
 };
 
 const getAllFighters = (req, res, next) => {
-  const userList = fighterService.getAll();
-  req.body = userList;
+  const fighterList = fighterService.getAll();
+  req.body = fighterList;
   return next();
 };
 
@@ -37,48 +37,48 @@ const deleteFighter = (req, res, next) => {
 const createFighterValid = (req, res, next) => {
   // TODO: Implement validatior for FIGHTER entity during creation
 
-  req.body.name = normalizeName(req.body.name);
-
-  const isExistName = searcher({ name: req.body.name });
-  if (isExistName) {
-    return next(error(400, `Fighter name is exist`));
-  }
-
   if (!req.body.health) {
     req.body.health = 100;
   }
 
-  const { isValid } = validateFighter(req.body);
+  const { isValid, message } = validateFighter(req.body);
   if (!isValid) {
     return next(error(400, `Fighter entity to create isn’t valid`));
   }
 
-  const newUser = fighterService.create(req.body);
-  req.body = newUser;
+  req.body.name = normalizeName(req.body.name);
+
+  const isExistName = searcher({ name: req.body.name });
+  if (!isExistName) {
+    return next(error(400, `Fighter name is exist`));
+  }
+
+  const newFighter = fighterService.create(req.body);
+  req.body = newFighter;
   return next();
 };
 
 const updateFighterValid = (req, res, next) => {
   // TODO: Implement validatior for FIGHTER entity during update
-  const isExistName = searcher({ name: req.body.name });
-  if (isExistName) {
-    return next(error(400, `Fighter name is exist`));
-  }
-
-  const { isValid, message } = validateFighterToUpdate(req.body);
-
+  const { isValid, message } = validateFighter(req.body);
   if (!isValid) {
     return next(error(400, `Fighter entity to create isn’t valid`));
   }
 
-  const { id } = req.body;
-  const updatedUser = fighterService.update(id, req.body);
+  const isExistName = searcher({ name: req.body.name });
 
-  if (!updatedUser) {
+  if (!isExistName) {
+    return next(error(400, `Fighter name is exist`));
+  }
+
+  const { id } = req.body;
+  const updatedFighter = fighterService.update(id, req.body);
+
+  if (!updatedFighter) {
     return next(error(404, `Fighter with ${id} is not defined`));
   }
 
-  req.body = updatedUser;
+  req.body = updatedFighter;
 
   return next();
 };

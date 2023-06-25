@@ -1,25 +1,37 @@
-function validateUser(user) {
-  if (!user.firstName || typeof user.firstName !== 'string') {
+function validateUser({ firstName, lastName, email, phoneNumber, password, ...rest }) {
+  if (!firstName && !lastName && !email && !phoneNumber && !password)
+    return {
+      isValid: false,
+      message: 'fields',
+    };
+
+  const isValidFirstName = typeof firstName === 'string' && firstName.length > 0;
+  if (!isValidFirstName) {
     return { isValid: false, message: 'firstName' };
   }
-  if (!user.lastName || typeof user.lastName !== 'string') {
+
+  const isValidLastName = typeof lastName === 'string' && lastName.length > 0;
+  if (!isValidLastName) {
     return { isValid: false, message: 'lastName' };
   }
-  if (!user.email || typeof user.email !== 'string' || !validateEmail(user.email)) {
+
+  const isValidEmail = typeof email === 'string' && validateEmail(email);
+  if (!isValidEmail) {
     return { isValid: false, message: 'email' };
   }
-  if (
-    !user.phoneNumber ||
-    typeof user.phoneNumber !== 'string' ||
-    !validatePhoneNumber(user.phoneNumber)
-  ) {
+
+  const isValidPhoneNumber = typeof phoneNumber === 'string' && validatePhoneNumber(phoneNumber);
+  if (!isValidPhoneNumber) {
     return { isValid: false, message: 'phoneNumber' };
   }
-  if (!user.password || typeof user.password !== 'string' || user.password.length < 3) {
+
+  const isValidPassword = typeof password === 'string' && password.length >= 3;
+  if (!isValidPassword) {
     return { isValid: false, message: 'password' };
   }
 
-  return { isValid: true, message: 'All fields valid' };
+  if (Object.keys(rest).length > 0) return { isValid: false, message: 'Exist another fields' };
+  return { isValid: true, message: 'All fields are valid' };
 }
 
 function validateUserToUpdate(user) {
