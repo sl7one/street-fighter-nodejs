@@ -83,7 +83,7 @@ const updateUserValid = (req, res, next) => {
     return next(error(400, 'Phone number exist in database'));
   }
 
-  const { id } = req.body;
+  const { id } = req.params;
   const updatedUser = userService.update(id, req.body);
 
   if (!updatedUser) {

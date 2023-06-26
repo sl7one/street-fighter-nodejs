@@ -71,7 +71,7 @@ const updateFighterValid = (req, res, next) => {
     return next(error(400, `Fighter name is exist`));
   }
 
-  const { id } = req.body;
+  const { id } = req.params;
   const updatedFighter = fighterService.update(id, req.body);
 
   if (!updatedFighter) {
