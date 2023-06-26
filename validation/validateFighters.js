@@ -41,4 +41,45 @@ function validateFighter({ power, defense, health, name, ...rest }) {
   return { isValid: true, message: 'All fields are valid' };
 }
 
-export { validateFighter };
+function validateFighterUpdate({ power, defense, health, name, ...rest }) {
+  if (typeof power !== 'undefined') {
+    const isValidPower = typeof power === 'number' && power >= 1 && power <= 100;
+    if (!isValidPower)
+      return {
+        isValid: false,
+        message: 'power',
+      };
+  }
+
+  if (typeof defense !== 'undefined') {
+    const isValidDefense = typeof defense === 'number' && defense >= 1 && defense <= 100;
+    if (!isValidDefense)
+      return {
+        isValid: false,
+        message: 'defense',
+      };
+  }
+
+  if (typeof name !== 'undefined') {
+    const isValidName = typeof name === 'string' && name.length > 0;
+    if (!isValidName)
+      return {
+        isValid: false,
+        message: 'name',
+      };
+  }
+
+  if (typeof health !== 'undefined') {
+    const isValidHealth = typeof health === 'number' && health >= 80 && health <= 120;
+    if (!isValidHealth)
+      return {
+        isValid: false,
+        message: 'health',
+      };
+  }
+
+  if (Object.keys(rest).length > 0) return { isValid: false, message: 'Exist another fields' };
+  return { isValid: true, message: 'All fields are valid' };
+}
+
+export { validateFighter, validateFighterUpdate };

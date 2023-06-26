@@ -2,7 +2,7 @@ import { error } from '../helpers/error.js';
 import { normalizeName } from '../helpers/normalizeName.js';
 import { USER } from '../models/user.js';
 import { userService } from '../services/userService.js';
-import { validateUser } from '../validation/validateUsers.js';
+import { validateUser, validateUserUpdate } from '../validation/validateUsers.js';
 
 const searcher = field => {
   return userService.search(field) === null ? true : false;
@@ -37,7 +37,7 @@ const deleteUser = (req, res, next) => {
 const createUserValid = (req, res, next) => {
   // TODO: Implement validatior for USER entity during creation
 
-  const { isValid } = validateUser(req.body);
+  const { isValid, message } = validateUser(req.body);
   if (!isValid) {
     return next(error(400, 'User entity to create isn’t valid'));
   }
@@ -68,7 +68,7 @@ const createUserValid = (req, res, next) => {
 const updateUserValid = (req, res, next) => {
   // TODO: Implement validatior for user entity during update
 
-  const { isValid, message } = validateUser(req.body);
+  const { isValid, message } = validateUserUpdate(req.body);
   if (!isValid) {
     return next(error(400, 'User entity to create isn’t valid'));
   }

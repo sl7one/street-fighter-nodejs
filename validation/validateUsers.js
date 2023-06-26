@@ -34,57 +34,54 @@ function validateUser({ firstName, lastName, email, phoneNumber, password, ...re
   return { isValid: true, message: 'All fields are valid' };
 }
 
-function validateUserToUpdate(user) {
-  const validation = [];
-
-  if (user.firstName || user.firstName === '') {
-    validation.push({
-      isValid: typeof user.firstName === 'string' && user.firstName.length > 0,
-      message: 'firstName',
-    });
+function validateUserUpdate({ firstName, lastName, email, phoneNumber, password, ...rest }) {
+  if (typeof firstName !== 'undefined') {
+    const isValidFirstName = typeof firstName === 'string' && firstName.length > 0;
+    if (!isValidFirstName)
+      return {
+        isValid: false,
+        message: 'firstName',
+      };
   }
 
-  if (user.lastName || user.lastName === '') {
-    validation.push({
-      isValid: typeof user.lastName === 'string' && user.lastName.length > 0,
-      message: 'lastName',
-    });
+  if (typeof lastName !== 'undefined') {
+    const isValidLastName = typeof lastName === 'string' && lastName.length > 0;
+    if (!isValidLastName)
+      return {
+        isValid: false,
+        message: 'lastName',
+      };
   }
 
-  if (user.email || user.email === '') {
-    validation.push({
-      isValid: typeof user.email === 'string' && validateEmail(user.email),
-      message: 'email',
-    });
+  if (typeof email !== 'undefined') {
+    const isValidEmail = typeof email === 'string' && validateEmail(email);
+    if (!isValidEmail)
+      return {
+        isValid: false,
+        message: 'email',
+      };
   }
 
-  if (user.phoneNumber || user.phoneNumber === '') {
-    validation.push({
-      isValid: typeof user.phoneNumber === 'string' && validatePhoneNumber(user.phoneNumber),
-      message: 'phoneNumber',
-    });
+  if (typeof phoneNumber !== 'undefined') {
+    const isValidPhoneNumber = typeof phoneNumber === 'string' && validatePhoneNumber(phoneNumber);
+    if (!isValidPhoneNumber)
+      return {
+        isValid: false,
+        message: 'phoneNumber',
+      };
   }
 
-  if (user.password || user.password === '') {
-    validation.push({
-      isValid: typeof user.password === 'string' && user.password.length >= 3,
-      message: 'password',
-    });
+  if (typeof password !== 'undefined') {
+    const isValidPassword = typeof password === 'string' && password.length >= 3;
+    if (!isValidPassword)
+      return {
+        isValid: false,
+        message: 'password',
+      };
   }
 
-  if (validation.length === 0) return { isValid: false, message: 'No fields to validate' };
-
-  if (validation.every(({ isValid }) => isValid)) {
-    return { isValid: true, message: 'All fields is valid' };
-  } else {
-    return {
-      isValid: false,
-      message: `Some fields is not valid: ${validation
-        .filter(({ isValid }) => !isValid)
-        .map(({ message }) => message)
-        .join(', ')}`,
-    };
-  }
+  if (Object.keys(rest).length > 0) return { isValid: false, message: 'Exist another fields' };
+  return { isValid: true, message: 'All fields are valid' };
 }
 
 function validateEmail(email) {
@@ -99,4 +96,4 @@ function validatePhoneNumber(phoneNumber) {
   return phoneRegex.test(phoneNumber);
 }
 
-export { validateUser, validateUserToUpdate };
+export { validateUser, validateUserUpdate };
