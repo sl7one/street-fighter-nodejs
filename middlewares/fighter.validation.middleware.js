@@ -72,6 +72,7 @@ const updateFighterValid = (req, res, next) => {
   }
 
   const { id } = req.params;
+  req.body.name ? (req.body.name = normalizeName(req.body.name)) : req.body.name;
   const updatedFighter = fighterService.update(id, req.body);
 
   if (!updatedFighter) {
