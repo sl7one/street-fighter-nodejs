@@ -61,6 +61,7 @@ const createFighterValid = (req, res, next) => {
 const updateFighterValid = (req, res, next) => {
   // TODO: Implement validatior for FIGHTER entity during update
   const { isValid, message } = validateFighter(req.body);
+  console.log(isValid, message);
   if (!isValid) {
     return next(error(400, `Fighter entity to create isn’t valid`));
   }

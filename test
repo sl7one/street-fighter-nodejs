@@ -1,0 +1,34 @@
+1) CRUD сутності користувача (1 / 4.5) 
+	⚠️ Базові методи CRUD 
+		⚠️ Створення сутності 
+			expected undefined to equal 'Elon'
+				Expected: Elon
+				Actual: undefined
+		⚠️ Зчитування всіх записів 
+			expected undefined to equal 1
+				Expected: 1
+				Actual: undefined
+		
+		⚠️ Оновлення даних 
+			expected undefined to equal 'Elon'
+				Expected: Elon
+				Actual: undefined
+
+3) Перевірка валідаційних правил користувача (оновлення) (0 / 5) 
+	⚠️ Перевірка даних при оновленні користувача 
+		
+4) Базовий CRUD сутності бійця (0.5 / 4) 
+	⚠️ Базові методи CRUD 
+		⚠️ Зчитування всіх записів 
+			expected undefined to equal 1
+				Expected: 1
+				Actual: undefined
+		⚠️ Оновлення даних 
+			expected { Object (_events, _eventsCount, ...) } to have status code 200 but got 500
+				Expected: 200
+				Actual: 500
+5) Перевірка валідаційних правил бійця (створення) (0 / 14) 
+
+6) Перевірка валідаційних правил бійця (оновлення) (0 / 12.5) 
+	⚠️ Перевірка даних при оновленні бійця 
+		

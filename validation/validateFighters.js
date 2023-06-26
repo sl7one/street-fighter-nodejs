@@ -9,14 +9,14 @@ function validateFighter({ power, defense, health, name, ...rest }) {
       message: 'fields',
     };
 
-  const isValidPower = power >= 1 && power <= 100;
+  const isValidPower = typeof power === 'number' && power >= 1 && power <= 100;
   if (!isValidPower)
     return {
       isValid: false,
       message: 'power',
     };
 
-  const isValidDefense = defense >= 1 && defense <= 10;
+  const isValidDefense = typeof defense === 'number' && defense >= 1 && defense <= 10;
   if (!isValidDefense)
     return {
       isValid: false,
@@ -30,7 +30,7 @@ function validateFighter({ power, defense, health, name, ...rest }) {
       message: 'name',
     };
 
-  const isValidHealth = health >= 80 && health <= 120;
+  const isValidHealth = typeof health === 'number' && health >= 80 && health <= 120;
   if (!isValidHealth)
     return {
       isValid: false,

@@ -1,7 +1,6 @@
 const responseMiddleware = (req, res) => {
   // TODO: Implement middleware that returns result of the query
 
-  console.log('responseMiddleware', req.body);
   res.status(200).json({
     message: 'Sucsess',
     result: req.body,
